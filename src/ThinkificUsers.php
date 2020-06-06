@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Thinkific;
 
 use Http\Client\Exception;
@@ -17,7 +16,7 @@ class ThinkificUsers extends ThinkificResource
      * @return stdClass
      * @throws Exception
      */
-    public function getUsers(array $options)
+    public function getUsers(array $options = [])
     {
         return $this->client->get('users', $options);
     }

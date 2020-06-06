@@ -63,6 +63,38 @@ class ThinkificClient
     public $users;
 
     /**
+     * @var ThinkificBundles $bundles
+     */
+    public $bundles;
+
+    /**
+     * @var ThinkificCategories $categories
+     */
+    public $categories;
+
+    /**
+     * @var ThinkificCategoryMemberships $memberships
+     */
+    public $memberships;
+
+    /**
+     * @var ThinkificChapters $chapters
+     */
+    public $chapters;
+
+    /**
+     * @var ThinkificContents $contents
+     */
+    public $contents;
+
+    /**
+     * @var ThinkificCoupons $coupons
+     */
+    public $coupons;
+
+    const THINKIFIC_API_URL = 'https://api.thinkific.com/api/public';
+
+    /**
      * ThinkificClient constructor.
      *
      * @param string $apiToken App Token.
@@ -73,6 +105,12 @@ class ThinkificClient
     public function __construct(string $apiToken, string $domain, array $extraRequestHeaders = [], $version = 1)
     {
         $this->users = new ThinkificUsers($this);
+        $this->bundles = new ThinkificBundles($this);
+        $this->categories = new ThinkificCategories($this);
+        $this->memberships = new ThinkificCategoryMemberships($this);
+        $this->chapters = new ThinkificChapters($this);
+        $this->contents = new ThinkificContents($this);
+        $this->coupons = new ThinkificCoupons($this);
 
         $this->apiToken = $apiToken;
         $this->domain = $domain;
@@ -124,7 +162,7 @@ class ThinkificClient
      */
     public function post($endpoint, $json)
     {
-        $response = $this->sendRequest('POST', "https://api.intercom.io/$endpoint", $json);
+        $response = $this->sendRequest('POST', self::THINKIFIC_API_URL."/v$this->version/$endpoint", $json);
         return $this->handleResponse($response);
     }
 
@@ -137,7 +175,7 @@ class ThinkificClient
      */
     public function put($endpoint, $json)
     {
-        $response = $this->sendRequest('PUT', "https://api.thinkific.com/api/public/v$this->version/$endpoint", $json);
+        $response = $this->sendRequest('PUT', self::THINKIFIC_API_URL."/v$this->version/$endpoint", $json);
         return $this->handleResponse($response);
     }
 
@@ -150,7 +188,7 @@ class ThinkificClient
      */
     public function delete($endpoint, $json)
     {
-        $response = $this->sendRequest('DELETE', "https://api.thinkific.com/api/public/v$this->version/$endpoint", $json);
+        $response = $this->sendRequest('DELETE', self::THINKIFIC_API_URL."/v$this->version/$endpoint", $json);
         return $this->handleResponse($response);
     }
 
@@ -163,7 +201,7 @@ class ThinkificClient
      */
     public function get($endpoint, $queryParams = [])
     {
-        $uri = $this->uriFactory->createUri("https://api.thinkific.com/api/public/v$this->version/$endpoint");
+        $uri = $this->uriFactory->createUri(self::THINKIFIC_API_URL."/v$this->version/$endpoint");
         if (!empty($queryParams)) {
             $uri = $uri->withQuery(http_build_query($queryParams));
         }
