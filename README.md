@@ -1,6 +1,6 @@
 # thinkific-php
 
-PHP bindings to the Intercom API
+PHP bindings to the Thinkific API
 
 ## Installation
 
@@ -110,5 +110,9 @@ try {
     }
 }
 ```
+
+## Credit
+
+The layout and methodology used in this library is courtesty of https://github.com/intercom/intercom-php
 
 
