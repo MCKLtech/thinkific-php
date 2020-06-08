@@ -274,6 +274,7 @@ class ThinkificClient
      */
     public function get($endpoint, $queryParams = [])
     {
+
         $uri = $this->uriFactory->createUri(self::THINKIFIC_API_URL."/v$this->version/$endpoint");
         if (!empty($queryParams)) {
             $uri = $uri->withQuery(http_build_query($queryParams));
