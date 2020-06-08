@@ -20,32 +20,37 @@ class ThinkificClient
     /**
      * @var HttpClient $httpClient
      */
-    private $httpClient;
+    public $httpClient;
 
     /**
      * @var RequestFactory $requestFactory
      */
-    private $requestFactory;
+    public $requestFactory;
 
     /**
      * @var UriFactory $uriFactory
      */
-    private $uriFactory;
+    public $uriFactory;
 
     /**
-     * @var string API Token
+     * @var string API or OAuth Token
      */
     public $apiToken;
 
     /**
      * @var string Thinkific Domain
      */
-    private $domain;
+    public $domain;
 
     /**
      * @var string Thinkific API Version
      */
     private $version;
+
+    /**
+     * @var bool Use OAuth
+     */
+    private $is_oauth;
 
     /**
      * @var array $extraRequestHeaders
@@ -148,6 +153,11 @@ class ThinkificClient
     public $promotions;
 
     /**
+     * @var ThinkificOAuth $oauth
+     */
+    public $oauth;
+
+    /**
      * @var ThinkificWebhooks $webhooks
      */
     public $webhooks;
@@ -161,8 +171,9 @@ class ThinkificClient
      * @param string $domain Domain
      * @param array $extraRequestHeaders Extra request headers to be sent in every api request
      * @param int $version API Version in use
+     * @param bool $oauth Set true if using OAuth token
      */
-    public function __construct(string $apiToken, string $domain, array $extraRequestHeaders = [], $version = 1)
+    public function __construct(string $apiToken, string $domain, array $extraRequestHeaders = [], $version = 1, $oauth = false)
     {
         $this->users = new ThinkificUsers($this);
         $this->bundles = new ThinkificBundles($this);
@@ -183,12 +194,14 @@ class ThinkificClient
         $this->products = new ThinkificProducts($this);
         $this->promotions = new ThinkificPromotions($this);
 
+        $this->oauth = new ThinkificOAuth($this);
         $this->webhooks = new ThinkificWebhooks($this);
 
         $this->apiToken = $apiToken;
         $this->domain = $domain;
         $this->extraRequestHeaders = $extraRequestHeaders;
         $this->version = $version;
+        $this->is_oauth = $oauth;
 
         $this->httpClient = $this->getDefaultHttpClient();
         $this->requestFactory = MessageFactoryDiscovery::find();
@@ -224,6 +237,16 @@ class ThinkificClient
     public function setUriFactory(UriFactory $uriFactory)
     {
         $this->uriFactory = $uriFactory;
+    }
+
+    /**
+     * Sets true if using OAuth
+     *
+     * @param bool $is_oauth
+     */
+    public function setOAuth($is_oauth)
+    {
+        $this->is_oauth = $is_oauth;
     }
 
     /**
@@ -276,6 +299,7 @@ class ThinkificClient
     {
 
         $uri = $this->uriFactory->createUri(self::THINKIFIC_API_URL."/v$this->version/$endpoint");
+
         if (!empty($queryParams)) {
             $uri = $uri->withQuery(http_build_query($queryParams));
         }
@@ -337,11 +361,23 @@ class ThinkificClient
      */
     private function getRequestAuthHeaders()
     {
-        return
-            [
+
+        if($this->is_oauth) {
+
+            $headers = [
+                'Authorization' => 'Bearer '.$this->apiToken
+            ];
+        }
+        else {
+
+            $headers = [
                 'X-Auth-API-Key' => $this->apiToken,
                 'X-Auth-Subdomain' => $this->domain
             ];
+        }
+
+        return $headers;
+
     }
 
     /**
@@ -372,7 +408,7 @@ class ThinkificClient
      *
      * @return stdClass
      */
-    private function handleResponse(ResponseInterface $response)
+    public function handleResponse(ResponseInterface $response)
     {
         $this->setRateLimitDetails($response);
 
