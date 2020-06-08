@@ -16,7 +16,7 @@ class ThinkificCoupons extends ThinkificResource
      * @return stdClass
      * @throws Exception
      */
-    public function getCoupons(array $options = [])
+    public function list(array $options = [])
     {
         return $this->client->get('coupons', $options);
     }
@@ -58,7 +58,7 @@ class ThinkificCoupons extends ThinkificResource
      * @return stdClass
      * @throws Exception
      */
-    public function getCoupon($id)
+    public function get($id)
     {
         $path = $this->couponPath($id);
 

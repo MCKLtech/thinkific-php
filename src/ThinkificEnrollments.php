@@ -1,15 +1,16 @@
 <?php
 
+
 namespace Thinkific;
 
 use Http\Client\Exception;
 use stdClass;
 
-class ThinkificUsers extends ThinkificResource
+class ThinkificEnrollments extends ThinkificResource
 {
 
     /**
-     * Lists Users
+     * Lists Enrollments.
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
      * @param  array $options
@@ -18,11 +19,11 @@ class ThinkificUsers extends ThinkificResource
      */
     public function list(array $options = [])
     {
-        return $this->client->get('users', $options);
+        return $this->client->get('enrollments', $options);
     }
 
     /**
-     * Creates a User
+     * Creates an Enrollment.
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
      * @param  array $options
@@ -31,59 +32,54 @@ class ThinkificUsers extends ThinkificResource
      */
     public function create(array $options)
     {
-        return $this->client->post('users', $options);
+        return $this->client->post('enrollments', $options);
     }
 
     /**
-     * Gets a single User based on the Thinkific ID.
+     * Gets a single enrollment by Enrollment ID
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
-     * @param  string $id
+     * @param  array $options
      * @return stdClass
      * @throws Exception
      */
     public function get($id)
     {
-        $path = $this->userPath($id);
-
-        return $this->client->get($path);
+        return $this->client->get('enrollments/'.$id);
     }
 
     /**
-     * Updates a User.
+     * Updates an Enrollment.
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
      * @param string $id
-     * @param array $options
+     * @param  array $options
      * @return stdClass
+     * @throws Exception
      */
     public function update($id, array $options)
     {
-        $path = $this->userPath($id);
-
-        return $this->client->put($path, $options);
+        return $this->client->put('enrollments/'.$id, $options);
     }
 
     /**
-     * Deletes a User.
+     * Expires an Enrollment.
+     * Wrapper for update which sets expiry date to today at midnight
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
-     * @param string $id
+     * @param string $id Enrollment ID
+     * @param string $expiry_date Expiry Date in ISO 8601 Format
      * @return stdClass
+     * @throws Exception
      */
-    public function delete($id)
+    public function expire($id, $expiry_date = false)
     {
-        $path = $this->userPath($id);
+        if(!$expiry_date) {
 
-        return $this->client->delete($path);
+            $expiry_date = date('c', strtotime('today'));
+        }
+
+        return $this->update($id, ['expiry_date' => $expiry_date]);
     }
 
-    /**
-     * @param string $id
-     * @return string
-     */
-    public function userPath(string $id)
-    {
-        return 'users/' . $id;
-    }
 }

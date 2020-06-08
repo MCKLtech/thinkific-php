@@ -1,15 +1,16 @@
 <?php
 
+
 namespace Thinkific;
 
 use Http\Client\Exception;
 use stdClass;
 
-class ThinkificUsers extends ThinkificResource
+class ThinkificPromotions extends ThinkificResource
 {
 
     /**
-     * Lists Users
+     * Lists Promotions
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
      * @param  array $options
@@ -18,11 +19,11 @@ class ThinkificUsers extends ThinkificResource
      */
     public function list(array $options = [])
     {
-        return $this->client->get('users', $options);
+        return $this->client->get('promotions', $options);
     }
 
     /**
-     * Creates a User
+     * Creates a Promotion
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
      * @param  array $options
@@ -31,11 +32,11 @@ class ThinkificUsers extends ThinkificResource
      */
     public function create(array $options)
     {
-        return $this->client->post('users', $options);
+        return $this->client->post('promotions', $options);
     }
 
     /**
-     * Gets a single User based on the Thinkific ID.
+     * Retrieves a single promotion by ID
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
      * @param  string $id
@@ -44,46 +45,68 @@ class ThinkificUsers extends ThinkificResource
      */
     public function get($id)
     {
-        $path = $this->userPath($id);
+        $path = $this->promotionPath($id);
 
         return $this->client->get($path);
     }
 
     /**
-     * Updates a User.
+     * Updates a promotion by ID
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
-     * @param string $id
-     * @param array $options
+     * @param  string $id
+     * @param  array $options
      * @return stdClass
+     * @throws Exception
      */
     public function update($id, array $options)
     {
-        $path = $this->userPath($id);
+        $path = $this->promotionPath($id);
 
         return $this->client->put($path, $options);
     }
 
     /**
-     * Deletes a User.
+     * Deletes a promotion by ID
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
-     * @param string $id
+     * @param  string $id
      * @return stdClass
+     * @throws Exception
      */
     public function delete($id)
     {
-        $path = $this->userPath($id);
+        $path = $this->promotionPath($id);
 
-        return $this->client->delete($path);
+        return $this->client->delete($path, []);
+    }
+
+    /**
+     * Retrieve Promotion by Coupon Code & Product
+     *
+     * @see    https://developers.thinkific.com/api/api-documentation/
+     * @param  string $product_id
+     * @param  string $coupon_code
+     * @return stdClass
+     * @throws Exception
+     */
+    public function getByCoupon($product_id, $coupon_code)
+    {
+        $options = [
+            'product_id' => $product_id,
+            'coupon_code' => $coupon_code,
+        ];
+
+        return $this->client->get('promotions', $options);
     }
 
     /**
      * @param string $id
      * @return string
      */
-    public function userPath(string $id)
+    public function promotionPath(string $id)
     {
-        return 'users/' . $id;
+        return 'promotions/' . $id;
     }
+
 }

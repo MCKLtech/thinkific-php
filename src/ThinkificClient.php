@@ -35,7 +35,7 @@ class ThinkificClient
     /**
      * @var string API Token
      */
-    private $apiToken;
+    public $apiToken;
 
     /**
      * @var string Thinkific Domain
@@ -92,6 +92,66 @@ class ThinkificClient
      */
     public $coupons;
 
+    /**
+     * @var ThinkificCourses $courses
+     */
+    public $courses;
+
+    /**
+     * @var ThinkificCourseReviews $reviews
+     */
+    public $reviews;
+
+    /**
+     * @var ThinkificProfileFields $fields
+     */
+    public $fields;
+
+    /**
+     * @var ThinkificEnrollments $enrollments
+     */
+    public $enrollments;
+
+    /**
+     * @var ThinkificGroups $groups
+     */
+    public $groups;
+
+    /**
+     * @var ThinkificGroupUsers $groupUsers
+     */
+    public $groupUsers;
+
+    /**
+     * @var ThinkificInstructors $instructors
+     */
+    public $instructors;
+
+    /**
+     * @var ThinkificOrders $orders
+     */
+    public $orders;
+
+    /**
+     * @var ThinkificProductPublishRequests $publishRequests
+     */
+    public $publishRequests;
+
+    /**
+     * @var ThinkificProducts $products
+     */
+    public $products;
+
+    /**
+     * @var ThinkificPromotions $promotions
+     */
+    public $promotions;
+
+    /**
+     * @var ThinkificWebhooks $webhooks
+     */
+    public $webhooks;
+
     const THINKIFIC_API_URL = 'https://api.thinkific.com/api/public';
 
     /**
@@ -111,6 +171,19 @@ class ThinkificClient
         $this->chapters = new ThinkificChapters($this);
         $this->contents = new ThinkificContents($this);
         $this->coupons = new ThinkificCoupons($this);
+        $this->courses = new ThinkificCourses($this);
+        $this->reviews = new ThinkificCourseReviews($this);
+        $this->fields = new ThinkificProfileFields($this);
+        $this->enrollments = new ThinkificEnrollments($this);
+        $this->groups = new ThinkificGroups($this);
+        $this->groupUsers = new ThinkificGroupUsers($this);
+        $this->instructors = new ThinkificInstructors($this);
+        $this->orders = new ThinkificOrders($this);
+        $this->publishRequests = new ThinkificProductPublishRequests($this);
+        $this->products = new ThinkificProducts($this);
+        $this->promotions = new ThinkificPromotions($this);
+
+        $this->webhooks = new ThinkificWebhooks($this);
 
         $this->apiToken = $apiToken;
         $this->domain = $domain;
@@ -186,7 +259,7 @@ class ThinkificClient
      * @param  array $json
      * @return stdClass
      */
-    public function delete($endpoint, $json)
+    public function delete($endpoint, $json = [])
     {
         $response = $this->sendRequest('DELETE', self::THINKIFIC_API_URL."/v$this->version/$endpoint", $json);
         return $this->handleResponse($response);
@@ -214,7 +287,7 @@ class ThinkificClient
     /**
      * Returns the next page of the result.
      *
-     * @param  stdClass $pages
+     * @param  stdClass $pages URL of next page
      * @return stdClass
      */
     public function nextPage($pages)
@@ -313,14 +386,8 @@ class ThinkificClient
     private function setRateLimitDetails(ResponseInterface $response)
     {
         $this->rateLimitDetails = [
-            'limit' => $response->hasHeader('RateLimit-Limit')
-                ? (int)$response->getHeader('RateLimit-Limit')[0]
-                : null,
-            'remaining' => $response->hasHeader('RateLimit-Remaining')
-                ? (int)$response->getHeader('RateLimit-Remaining')[0]
-                : null,
             'reset_at' => $response->hasHeader('RateLimit-Reset')
-                ? (new \DateTimeImmutable())->setTimestamp((int)$response->getHeader('RateLimit-Reset')[0])
+                ? (int)$response->getHeader('RateLimit-Reset')
                 : null,
         ];
     }

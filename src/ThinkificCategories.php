@@ -16,7 +16,7 @@ class ThinkificCategories extends ThinkificResource
      * @param array $options
      * @return stdClass
      */
-    public function getCollections(array $options = [])
+    public function list(array $options = [])
     {
         return $this->client->get('collections', $options);
     }
@@ -40,7 +40,7 @@ class ThinkificCategories extends ThinkificResource
      * @param string $id
      * @return stdClass
      */
-    public function getCollection($id)
+    public function get($id)
     {
         $path = $this->collectionPath($id);
 

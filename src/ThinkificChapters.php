@@ -17,7 +17,7 @@ class ThinkificChapters extends ThinkificResource
      * @return stdClass
      * @throws Exception
      */
-    public function getChapter($id)
+    public function get($id)
     {
         $path = $this->chapterPath($id);
 
@@ -32,7 +32,7 @@ class ThinkificChapters extends ThinkificResource
      * @return stdClass
      * @throws Exception
      */
-    public function getChapterContents($id)
+    public function getContents($id)
     {
         $path = $this->chapterPath($id);
 

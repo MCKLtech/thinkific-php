@@ -6,19 +6,19 @@ namespace Thinkific;
 use Http\Client\Exception;
 use stdClass;
 
-class ThinkificContents extends ThinkificResource
+class ThinkificGroups extends ThinkificResource
 {
 
     /**
-     * Gets a content
+     * Lists Groups
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
-     * @param  string $id
+     * @param  array $options
      * @return stdClass
      * @throws Exception
      */
-    public function get($id)
+    public function get(array $options = [])
     {
-        return $this->client->get('contents/'.$id);
+        return $this->client->get('groups', $options);
     }
 }

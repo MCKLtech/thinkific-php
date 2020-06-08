@@ -1,15 +1,16 @@
 <?php
 
+
 namespace Thinkific;
 
 use Http\Client\Exception;
 use stdClass;
 
-class ThinkificUsers extends ThinkificResource
+class ThinkificInstructors extends ThinkificResource
 {
 
     /**
-     * Lists Users
+     * Lists Instructors
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
      * @param  array $options
@@ -18,11 +19,11 @@ class ThinkificUsers extends ThinkificResource
      */
     public function list(array $options = [])
     {
-        return $this->client->get('users', $options);
+        return $this->client->get('instructors', $options);
     }
 
     /**
-     * Creates a User
+     * Creates an Instructor
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
      * @param  array $options
@@ -31,11 +32,11 @@ class ThinkificUsers extends ThinkificResource
      */
     public function create(array $options)
     {
-        return $this->client->post('users', $options);
+        return $this->client->post('instructors', $options);
     }
 
     /**
-     * Gets a single User based on the Thinkific ID.
+     * Gets a single instructor
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
      * @param  string $id
@@ -44,46 +45,34 @@ class ThinkificUsers extends ThinkificResource
      */
     public function get($id)
     {
-        $path = $this->userPath($id);
-
-        return $this->client->get($path);
+        return $this->client->get('instructors/'.$id);
     }
 
     /**
-     * Updates a User.
+     * Update an instructor
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
-     * @param string $id
-     * @param array $options
+     * @param  string $id
+     * @param  array $options
      * @return stdClass
+     * @throws Exception
      */
     public function update($id, array $options)
     {
-        $path = $this->userPath($id);
-
-        return $this->client->put($path, $options);
+        return $this->client->put('instructors/'.$id, $options);
     }
 
     /**
-     * Deletes a User.
+     * Delete an instructor
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
-     * @param string $id
+     * @param  string $id
      * @return stdClass
+     * @throws Exception
      */
     public function delete($id)
     {
-        $path = $this->userPath($id);
-
-        return $this->client->delete($path);
+        return $this->client->delete('instructors/'.$id);
     }
 
-    /**
-     * @param string $id
-     * @return string
-     */
-    public function userPath(string $id)
-    {
-        return 'users/' . $id;
-    }
 }

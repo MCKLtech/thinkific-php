@@ -8,20 +8,6 @@ use stdClass;
 
 class ThinkificBundles extends ThinkificResource
 {
-
-    /**
-     * Get Bundles
-     * WARNING: This end point does not exist, it is only included for completion and in hopes it will exist int the future
-     * @see    https://developers.thinkific.com/api/api-documentation/
-     * @param  array $options
-     * @return stdClass
-     * @throws Exception
-     */
-    public function getBundles(array $options = [])
-    {
-        return $this->client->get('bundles', $options);
-    }
-
     /**
      * Gets a single Bundle by Bundle ID
      *
@@ -30,7 +16,7 @@ class ThinkificBundles extends ThinkificResource
      * @return stdClass
      * @throws Exception
      */
-    public function getBundle($id)
+    public function get($id)
     {
         $path = $this->bundlePath($id);
 
@@ -38,7 +24,7 @@ class ThinkificBundles extends ThinkificResource
     }
 
     /**
-     * Gets courses in Bundle
+     * Gets courses in a given Bundle
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
      * @param  string $id Bundle ID
@@ -46,7 +32,7 @@ class ThinkificBundles extends ThinkificResource
      * @return stdClass
      * @throws Exception
      */
-    public function getBundleCourses($id, array $options = [])
+    public function getCourses($id, array $options = [])
     {
         $path = $this->bundlePath($id);
 
@@ -62,7 +48,7 @@ class ThinkificBundles extends ThinkificResource
      * @return stdClass
      * @throws Exception
      */
-    public function getBundleEnrollments($id, array $options = [])
+    public function getEnrollments($id, array $options = [])
     {
         $path = $this->bundlePath($id);
 
@@ -78,7 +64,7 @@ class ThinkificBundles extends ThinkificResource
      * @return stdClass
      * @throws Exception
      */
-    public function createEnrollment($id, array $options)
+    public function create($id, array $options)
     {
         $path = $this->bundlePath($id);
 
@@ -94,7 +80,7 @@ class ThinkificBundles extends ThinkificResource
      * @return stdClass
      * @throws Exception
      */
-    public function updateEnrollment($id, array $options)
+    public function update($id, array $options)
     {
         $path = $this->bundlePath($id);
 
