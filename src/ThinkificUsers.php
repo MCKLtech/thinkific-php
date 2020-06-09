@@ -80,16 +80,18 @@ class ThinkificUsers extends ThinkificResource
 
     /**
      * Finds Users by given params
+     * Defaults to a search by email address
      * See Thinkific Docs for more information & filter options
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
      * @param  string $value The value to search by e.g. An email address
      * @param  string $query The query param e.g. 'email', 'role' etc
      * @param  bool $single Return a single result (Defaults to first result on the first page)
+     * @param  array $addOptions Additional parameters e.g. Page, Limit
      * @return stdClass
      * @throws Exception
      */
-    public function findBy($value, $query = 'email', $single = true)
+    public function findBy($value, $query = 'email', $single = true, $addOptions = [])
     {
         $query = "query[$query]";
 
@@ -106,6 +108,8 @@ class ThinkificUsers extends ThinkificResource
                 ['page' => 1, 'limit' => 1]
             );
         }
+
+        $options = array_merge($options, $addOptions);
 
         $result =  $this->client->get('users', $options);
 

@@ -82,4 +82,26 @@ class ThinkificEnrollments extends ThinkificResource
         return $this->update($id, ['expiry_date' => $expiry_date]);
     }
 
+    /**
+     * Finds Enrollments by given params
+     * Defaults to a search by User ID
+     * See Thinkific Docs for more information & filter options
+     *
+     * @see    https://developers.thinkific.com/api/api-documentation/
+     * @param  string $value The value to search by e.g. User Thinkific ID
+     * @param  string $query The query param e.g. 'user_id', 'email' etc
+     * @param  array $options Additional options e.g. Page, Limit etc
+     * @return stdClass
+     * @throws Exception
+     */
+    public function findBy($value, $query = 'user_id', $options = [])
+    {
+        $query = "query[$query]";
+
+        $options = array_merge([$query => $value], $options);
+
+       return $this->client->get('enrollments', $options);
+
+    }
+
 }

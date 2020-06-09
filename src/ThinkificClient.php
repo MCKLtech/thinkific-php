@@ -171,7 +171,7 @@ class ThinkificClient
      * @param string $domain Domain
      * @param array $extraRequestHeaders Extra request headers to be sent in every api request
      * @param int $version API Version in use
-     * @param bool $oauth Set true if using OAuth token
+     * @param bool $oauth Set true if using OAuth token instead of API key
      */
     public function __construct(string $apiToken, string $domain, array $extraRequestHeaders = [], $version = 1, $oauth = false)
     {
