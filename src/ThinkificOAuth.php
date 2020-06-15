@@ -28,11 +28,11 @@ class ThinkificOAuth extends ThinkificResource
         $uri = $this->client->uriFactory->createUri("https://".$this->client->domain.".thinkific.com/oauth2/token");
 
         $body = [
-            'grant_type' => 'token',
+            'grant_type' => 'code',
             'refresh_token' => $refresh_token
         ];
 
-        $request = $this->client->requestFactory->createRequest('POST', $uri, $headers, $body);
+        $request = $this->client->requestFactory->createRequest('POST', $uri, $headers, json_encode($body));
 
         $response = $this->client->httpClient->sendRequest($request);
 
