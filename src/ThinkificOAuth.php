@@ -22,13 +22,15 @@ class ThinkificOAuth extends ThinkificResource
     public function refresh($client_id, $client_secret, $refresh_token) {
 
         $headers = [
-            'Authorization' => 'Basic '.base64_encode("$client_id:$client_secret")
+            'Authorization' => 'Basic '.base64_encode("$client_id:$client_secret"),
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
         ];
 
         $uri = $this->client->uriFactory->createUri("https://".$this->client->domain.".thinkific.com/oauth2/token");
 
         $body = [
-            'grant_type' => 'code',
+            'grant_type' => 'refresh_token',
             'refresh_token' => $refresh_token
         ];
 

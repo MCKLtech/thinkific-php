@@ -14,7 +14,7 @@ This library is intended to speed up development time but is not a shortcut to r
 composer require mckltech/thinkific-php
 ```
 
-## Clients
+## Clients - API Key 
 
 Initialize your client using your access token:
 
@@ -27,6 +27,23 @@ $client = new ThinkificClient('XXXXAPIKEYXXXX', 'subdomain');
 > - You can find your API Key by following the Thinkific API documentation: https://developers.thinkific.com/api/api-key-auth
 >
 > - For your subdomain, do not include .thinkific.com. For example, if your subdomain is example.thinkific.com, then you would use 'example' in your ThinkificClient set up. If you are using a custom domain, you should retrieve your Thinkific sub-domain from your Thinkific dashboard.
+
+## Clients - OAuth
+
+The library permits the use of OAuth Access Tokens for API access, in addition to containing a helper method for refreshing. Note, the library does not implement the OAuth flow itself. I recommend using a standalone library for this e.g. Laravel Socialite
+
+```php
+use Thinkific\ThinkificClient;
+
+$client = new ThinkificClient('OAUTH_ACCESS_TOKEN', 'subdomain', [], 1, true);
+```
+
+To refresh the OAuth token, the library contains a helper method:
+
+```php
+$refreshData = $client->oauth->refresh('client_id', 'client_secret', 'OAUTH_REFRESH_TOKEN');
+```
+
 
 ## Support, Issues & Bugs
 
