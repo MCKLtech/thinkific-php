@@ -9,6 +9,36 @@ use stdClass;
 class ThinkificBundles extends ThinkificResource
 {
     /**
+     * A workaround to list out bundles for a given school
+     *
+     * @param array $options e.g. Page, Limit
+     * @return array
+     * @throws Exception
+     */
+    public function list($options = []) {
+
+        $products = $this->client->products->list($options);
+
+        $bundles = [];
+
+        if(isset($products->items)) {
+
+            foreach($products->items as $product) {
+
+                if($product->productable_type == 'Bundle') {
+
+                    $product->id = $product->productable_id;
+
+                    $bundles[] = $product;
+                }
+            }
+        }
+
+        return $bundles;
+
+    }
+
+    /**
      * Gets a single Bundle by Bundle ID
      *
      * @see    https://developers.thinkific.com/api/api-documentation/

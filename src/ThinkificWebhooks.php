@@ -8,6 +8,18 @@ use stdClass;
 
 class ThinkificWebhooks extends ThinkificResource
 {
+    /**
+     * Returns a list of webhooks currently set up on the account
+     *
+     * IMPORTANT: Not currently operational as requires API V2 endpoint
+     *
+     * @param array $options
+     * @return stdClass
+     */
+    public function list($options = []) {
+
+        return $this->client->get('webhooks', $options);
+    }
 
     /**
      * Validates a webhook
