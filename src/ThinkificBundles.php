@@ -88,6 +88,32 @@ class ThinkificBundles extends ThinkificResource
     }
 
     /**
+     * Expires a Bundle Enrollment.
+     * Wrapper for update which sets expiry date to today at midnight
+     *
+     * @see    https://developers.thinkific.com/api/api-documentation/
+     * @param $bundle_id Bundle ID
+     * @param $user_id Thinkific User ID
+     * @param bool $expiry_date Expiry Date in ISO 8601 Format
+     * @return stdClass
+     * @throws Exception
+     */
+    public function expire($bundle_id, $user_id, $expiry_date = false)
+    {
+        if(!$expiry_date) {
+
+            $expiry_date = date('c', strtotime('today'));
+        }
+
+        $options = [
+            'user_id' => $user_id,
+            'expiry_date' => $expiry_date
+        ];
+
+        return $this->update($bundle_id, $options);
+    }
+
+    /**
      * @param string $id
      * @return string
      */
