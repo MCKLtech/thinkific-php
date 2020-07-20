@@ -88,19 +88,34 @@ class ThinkificEnrollments extends ThinkificResource
      * See Thinkific Docs for more information & filter options
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
-     * @param  string $value The value to search by e.g. User Thinkific ID
-     * @param  string $query The query param e.g. 'user_id', 'email' etc
-     * @param  array $options Additional options e.g. Page, Limit etc
+     * @param string $value The value to search by e.g. User Thinkific ID
+     * @param string $query The query param e.g. 'user_id', 'email' etc
+     * @param array $options Additional options e.g. Page, Limit etc
+     * @param bool $single Return a single result, useful for finding enrollments for a given user
      * @return stdClass
-     * @throws Exception
      */
-    public function findBy($value, $query = 'user_id', $options = [])
+    public function findBy($value, $query = 'user_id', $options = [], $single = false)
     {
         $query = "query[$query]";
 
         $options = array_merge([$query => $value], $options);
 
-       return $this->client->get('enrollments', $options);
+        if($single) {
+
+            $options = array_merge(
+                $options,
+                ['page' => 1, 'limit' => 1]
+            );
+        }
+
+        $result = $this->client->get('enrollments', $options);
+
+        if($single && isset($result->items)) {
+
+            return reset($result->items);
+        }
+
+       return $result;
 
     }
 
