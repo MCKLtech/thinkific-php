@@ -8,17 +8,16 @@ use stdClass;
 
 class ThinkificCoupons extends ThinkificResource
 {
-
     /**
      * Get Coupons
      * @see    https://developers.thinkific.com/api/api-documentation/
-     * @param  array $options
+     * @param int $id Promo ID
+     * @param array $options
      * @return stdClass
-     * @throws Exception
      */
-    public function list(array $options = [])
+    public function list(int $id, array $options = [])
     {
-        return $this->client->get('coupons', $options);
+        return $this->client->get("coupons?promotion_id=$id", $options);
     }
 
     /**
@@ -31,9 +30,7 @@ class ThinkificCoupons extends ThinkificResource
      */
     public function create($id, array $options)
     {
-        $path = $this->couponPath($id);
-
-        return $this->client->post($path, $options);
+        return $this->client->post("coupons?promotion_id=$id", $options);
     }
 
     /**
@@ -46,9 +43,7 @@ class ThinkificCoupons extends ThinkificResource
      */
     public function createBulk($id, array $options)
     {
-        $path = $this->couponPath($id);
-
-        return $this->client->post($path, $options);
+        return $this->client->post("coupons?promotion_id=$id", $options);
     }
 
     /**
