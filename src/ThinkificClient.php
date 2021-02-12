@@ -250,6 +250,36 @@ class ThinkificClient
     }
 
     /**
+     * Determines if a response has more pages
+     *
+     * @param stdClass $response
+     * @return bool
+     */
+    public function hasMore(stdClass $response) {
+
+        if(isset($response->meta->pagintion)) {
+
+            return $response->meta->pagintion->current_page < $response->meta->pagintion->next_page;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns the next page number of a response
+     *
+     * @param string $path
+     * @param stdClass $response
+     * @return int
+     * @throws ClientExceptionInterface
+     */
+    public function nextPage(stdClass $response) {
+
+        return isset($response->meta->pagintion->next_page) ? $response->meta->pagintion->next_page : 1;
+
+    }
+
+    /**
      * Sends POST request to Thinkific API.
      *
      * @param  string $endpoint
@@ -306,18 +336,6 @@ class ThinkificClient
 
         $response = $this->sendRequest('GET', $uri);
 
-        return $this->handleResponse($response);
-    }
-
-    /**
-     * Returns the next page of the result.
-     *
-     * @param  stdClass $pages URL of next page
-     * @return stdClass
-     */
-    public function nextPage($pages)
-    {
-        $response = $this->sendRequest('GET', $pages->next);
         return $this->handleResponse($response);
     }
 
