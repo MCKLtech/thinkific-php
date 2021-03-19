@@ -257,9 +257,9 @@ class ThinkificClient
      */
     public function hasMore(stdClass $response) {
 
-        if(isset($response->meta->pagintion)) {
+        if(isset($response->meta->pagination)) {
 
-            return $response->meta->pagintion->current_page < $response->meta->pagintion->next_page;
+            return $response->meta->pagination->current_page < $response->meta->pagination->next_page;
         }
 
         return false;
@@ -275,7 +275,7 @@ class ThinkificClient
      */
     public function nextPage(stdClass $response) {
 
-        return isset($response->meta->pagintion->next_page) ? $response->meta->pagintion->next_page : 1;
+        return isset($response->meta->pagination->next_page) ? $response->meta->pagination->next_page : 1;
 
     }
 
