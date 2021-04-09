@@ -255,9 +255,10 @@ class ThinkificClient
      * @param stdClass $response
      * @return bool
      */
-    public function hasMore(stdClass $response) {
+    public function hasMore(stdClass $response)
+    {
 
-        if(isset($response->meta->pagination)) {
+        if (isset($response->meta->pagination)) {
 
             return $response->meta->pagination->current_page < $response->meta->pagination->next_page;
         }
@@ -273,48 +274,47 @@ class ThinkificClient
      * @return int
      * @throws ClientExceptionInterface
      */
-    public function nextPage(stdClass $response) {
-
+    public function nextPage(stdClass $response)
+    {
         return isset($response->meta->pagination->next_page) ? $response->meta->pagination->next_page : 1;
-
     }
 
     /**
      * Sends POST request to Thinkific API.
      *
-     * @param  string $endpoint
-     * @param  array $json
+     * @param string $endpoint
+     * @param array $json
      * @return stdClass
      */
     public function post($endpoint, $json)
     {
-        $response = $this->sendRequest('POST', self::THINKIFIC_API_URL."/v$this->version/$endpoint", $json);
+        $response = $this->sendRequest('POST', self::THINKIFIC_API_URL . "/v$this->version/$endpoint", $json);
         return $this->handleResponse($response);
     }
 
     /**
      * Sends PUT request to Thinkific API.
      *
-     * @param  string $endpoint
-     * @param  array $json
+     * @param string $endpoint
+     * @param array $json
      * @return stdClass
      */
     public function put($endpoint, $json)
     {
-        $response = $this->sendRequest('PUT', self::THINKIFIC_API_URL."/v$this->version/$endpoint", $json);
+        $response = $this->sendRequest('PUT', self::THINKIFIC_API_URL . "/v$this->version/$endpoint", $json);
         return $this->handleResponse($response);
     }
 
     /**
      * Sends DELETE request to Thinkific API.
      *
-     * @param  string $endpoint
-     * @param  array $json
+     * @param string $endpoint
+     * @param array $json
      * @return stdClass
      */
     public function delete($endpoint, $json = [])
     {
-        $response = $this->sendRequest('DELETE', self::THINKIFIC_API_URL."/v$this->version/$endpoint", $json);
+        $response = $this->sendRequest('DELETE', self::THINKIFIC_API_URL . "/v$this->version/$endpoint", $json);
         return $this->handleResponse($response);
     }
 
@@ -322,13 +322,13 @@ class ThinkificClient
      * Sends GET request to Thinkific API.
      *
      * @param string $endpoint
-     * @param array  $queryParams
+     * @param array $queryParams
      * @return stdClass
      */
     public function get($endpoint, $queryParams = [])
     {
 
-        $uri = $this->uriFactory->createUri(self::THINKIFIC_API_URL."/v$this->version/$endpoint");
+        $uri = $this->uriFactory->createUri(self::THINKIFIC_API_URL . "/v$this->version/$endpoint");
 
         if (!empty($queryParams)) {
             $uri = $uri->withQuery(http_build_query($queryParams));
@@ -380,13 +380,12 @@ class ThinkificClient
     private function getRequestAuthHeaders()
     {
 
-        if($this->is_oauth) {
+        if ($this->is_oauth) {
 
             $headers = [
-                'Authorization' => 'Bearer '.$this->apiToken
+                'Authorization' => 'Bearer ' . $this->apiToken
             ];
-        }
-        else {
+        } else {
 
             $headers = [
                 'X-Auth-API-Key' => $this->apiToken,
@@ -399,9 +398,9 @@ class ThinkificClient
     }
 
     /**
-     * @param string              $method
+     * @param string $method
      * @param string|UriInterface $uri
-     * @param array|string|null   $body
+     * @param array|string|null $body
      *
      * @return ResponseInterface
      * @throws ClientExceptionInterface

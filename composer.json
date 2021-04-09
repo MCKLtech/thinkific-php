@@ -1,6 +1,6 @@
 {
     "name": "mckltech/thinkific-php",
-    "description": "Thinkific API client built on top of Guzzle 7",
+    "description": "Thinkific API client. Requires Guzzle 6 or 7 (Or HTTP client of your choice)",
     "keywords": [
         "api",
         "guzzle",
