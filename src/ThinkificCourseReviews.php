@@ -10,6 +10,18 @@ class ThinkificCourseReviews extends ThinkificResource
 {
 
     /**
+     * List Course Reviews
+     *
+     * @see    https://developers.thinkific.com/api/api-documentation/
+     * @param array $options
+     * @return stdClass
+     */
+    public function list(array $options = [])
+    {
+        return $this->client->get('course_reviews', $options);
+    }
+
+    /**
      * Lists reviews for a given course ID
      *
      * @see    https://developers.thinkific.com/api/api-documentation/
@@ -20,9 +32,7 @@ class ThinkificCourseReviews extends ThinkificResource
      */
     public function getCourseReviews($id, array $options = [])
     {
-        $options = array_merge(['course_id' => $id], $options);
-
-        return $this->client->get('course_reviews', $options);
+        return $this->list(array_merge(['course_id' => $id], $options));
     }
 
     /**
