@@ -162,6 +162,11 @@ class ThinkificClient
      */
     public $webhooks;
 
+    /**
+     * @var ThinkificSiteScripts $siteScripts
+     */
+    public $siteScripts;
+
     const THINKIFIC_API_URL = 'https://api.thinkific.com/api/public';
 
     /**
@@ -196,6 +201,7 @@ class ThinkificClient
 
         $this->oauth = new ThinkificOAuth($this);
         $this->webhooks = new ThinkificWebhooks($this);
+        $this->siteScripts = new ThinkificSiteScripts($this);
 
         $this->apiToken = $apiToken;
         $this->domain = $domain;
