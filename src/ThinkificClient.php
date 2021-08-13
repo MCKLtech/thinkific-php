@@ -167,7 +167,7 @@ class ThinkificClient
      */
     public $siteScripts;
 
-    const THINKIFIC_API_URL = 'https://api.thinkific.com/api/public';
+    public $thinkificApiEndPoint = 'https://api.thinkific.com/api/public';
 
     /**
      * ThinkificClient constructor.
@@ -212,11 +212,20 @@ class ThinkificClient
         $this->httpClient = $this->getDefaultHttpClient();
         $this->requestFactory = MessageFactoryDiscovery::find();
         $this->uriFactory = UriFactoryDiscovery::find();
+    }
 
+    /**
+     * Allows us to change the end point
+     * @param $end_point
+     */
+    public function setEndpoint($end_point)
+    {
+        $this->thinkificApiEndPoint = $end_point;
     }
 
     /**
      * Sets the HTTP client.
+     * e.g. https://api.thinkific.com/api/v2 for Webhooks
      *
      * @param HttpClient $httpClient
      */
@@ -265,7 +274,6 @@ class ThinkificClient
     {
 
         if (isset($response->meta->pagination)) {
-
             return $response->meta->pagination->current_page < $response->meta->pagination->next_page;
         }
 
@@ -294,7 +302,7 @@ class ThinkificClient
      */
     public function post($endpoint, $json)
     {
-        $response = $this->sendRequest('POST', self::THINKIFIC_API_URL . "/v$this->version/$endpoint", $json);
+        $response = $this->sendRequest('POST', $this->thinkificApiEndPoint . "/v$this->version/$endpoint", $json);
         return $this->handleResponse($response);
     }
 
@@ -307,7 +315,7 @@ class ThinkificClient
      */
     public function put($endpoint, $json)
     {
-        $response = $this->sendRequest('PUT', self::THINKIFIC_API_URL . "/v$this->version/$endpoint", $json);
+        $response = $this->sendRequest('PUT', $this->thinkificApiEndPoint . "/v$this->version/$endpoint", $json);
         return $this->handleResponse($response);
     }
 
@@ -320,7 +328,7 @@ class ThinkificClient
      */
     public function delete($endpoint, $json = [])
     {
-        $response = $this->sendRequest('DELETE', self::THINKIFIC_API_URL . "/v$this->version/$endpoint", $json);
+        $response = $this->sendRequest('DELETE', $this->thinkificApiEndPoint . "/v$this->version/$endpoint", $json);
         return $this->handleResponse($response);
     }
 
@@ -334,7 +342,7 @@ class ThinkificClient
     public function get($endpoint, $queryParams = [])
     {
 
-        $uri = $this->uriFactory->createUri(self::THINKIFIC_API_URL . "/v$this->version/$endpoint");
+        $uri = $this->uriFactory->createUri($this->thinkificApiEndPoint . "/v$this->version/$endpoint");
 
         if (!empty($queryParams)) {
             $uri = $uri->withQuery(http_build_query($queryParams));
@@ -387,12 +395,10 @@ class ThinkificClient
     {
 
         if ($this->is_oauth) {
-
             $headers = [
                 'Authorization' => 'Bearer ' . $this->apiToken
             ];
         } else {
-
             $headers = [
                 'X-Auth-API-Key' => $this->apiToken,
                 'X-Auth-Subdomain' => $this->domain
@@ -400,7 +406,6 @@ class ThinkificClient
         }
 
         return $headers;
-
     }
 
     /**
@@ -451,6 +456,4 @@ class ThinkificClient
                 : null,
         ];
     }
-
-
 }
