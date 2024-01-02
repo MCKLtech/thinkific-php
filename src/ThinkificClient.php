@@ -450,9 +450,12 @@ class ThinkificClient
      */
     private function setRateLimitDetails(ResponseInterface $response)
     {
+        /**
+         * Thinkific returns it's reset in milliseconds e.g. 1704220081000
+         */
         $this->rateLimitDetails = [
             'reset_at' => $response->hasHeader('RateLimit-Reset')
-                ? (int)$response->getHeader('RateLimit-Reset')
+                ? $response->getHeader('RateLimit-Reset')
                 : null,
         ];
     }
